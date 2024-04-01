@@ -1,0 +1,177 @@
+swagger: '2.0'
+info:
+  description: 'WebPortal API docs'
+  version: '1.0.0'
+  title: 'WebPortal'
+  termOfService: ''
+  contact:
+    email: 'hung.nguyen1610@gmail.com'
+  license:
+    name: 'MIT'
+    url: 'https://opensource.org/licenses/MIT'
+host: 'localhost:5000'
+basePath: '/api/v1'
+tags:
+- name: 'auth'
+  description: 'Authentication APIs'
+- name: 'Categories'
+  description: 'Categories APIs'
+- name: 'Contents'
+  description: 'Contents APIs'
+- name: 'Banners'
+  description: 'Banners APIs'
+- name: 'ContentTypes'
+  description: 'ContentTypes APIs'
+- name: 'Languages'
+  description: 'Languages APIs'
+- name: 'Users'
+  description: 'User APIs'
+schemes:
+- 'http'
+paths:
+  /auth:
+    post:
+      tags:
+      - 'auth'
+      summary: 'Login API and get token'
+      description: 'Input email and password'
+      operationId: "login"
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters:
+      - in: 'body'
+        name: 'body'
+        description: 'Login for user'
+        required: true
+        schema: 
+          $ref: '#/definitions/LoginDto'
+      responses:
+        '400':
+          description: 'Invalid input'
+  /languages:
+    post:
+      tags: [Languages]
+      summary: 'Create new Languages'
+      description: 'Input language properties'
+      operationId: "createLanguage"
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters:
+      - in: 'body'
+        name: 'body'
+        description: 'Create new Languages'
+        required: true
+        schema: 
+          $ref: '#/definitions/LanguageDto'
+      responses:
+        '400':
+          description: 'Invalid input'
+    get:
+      summary: Lists all the Languages
+      tags: [Languages]
+      responses:
+        200:
+          description: The list of the Languages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/definitions/LanguageDto'
+  /languages/paging/{page}:
+    get:
+      summary: Lists all the Languages and paging
+      tags: [Languages]
+      parameters:
+        - in: path
+          name: page
+          schema:
+            type: integer
+          required: true
+          description: Page number
+      responses:
+        200:
+          description: The list of the Languages and paging
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/definitions/LanguageDto'
+  /languages/{id}:
+    get:
+      summary: Get the language by id
+      tags: [Languages]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The language id
+      responses:
+        200:
+          description: The language response by id
+          content:
+          application/json:
+            schema:
+              $ref: '#/definitions/LanguageDto'
+        404:
+          description: The book was not found
+    put:
+      tags: [Languages]
+      summary: 'Update Languages'
+      description: 'Input language properties'
+      operationId: "updateLanguage"
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters:
+      - in: 'body'
+        name: 'body'
+        description: 'Update Languages'
+        required: true
+        schema: 
+          $ref: '#/definitions/LanguageDto'
+      responses:
+        '400':
+          description: 'Invalid input'
+    delete:
+      tags: [Languages]
+      summary: Deletes a Language
+      description: delete a Language
+      operationId: deleteLanguage
+      parameters:
+        
+        - name: id
+          in: path
+          description: Language id to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Invalid language id
+definitions:
+  LoginDto:
+    type: 'object'
+    properties:
+      email:
+        type: 'string'
+      password:
+        type: 'string'
+  LanguageDto:
+    type: 'object'
+    properties:
+      name:
+        type: 'string'
+        required: true
+      code:
+        type: 'string'
+      isDefault:
+        type: 'boolean'
